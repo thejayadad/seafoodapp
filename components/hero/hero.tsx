@@ -21,7 +21,7 @@ export default async function Hero({
 }: Props) {
   // SSR-only: later you can compute hours from DB if needed
   return (
-    <section className={`w-full bg-base-200 ${className ?? ""}`}>
+    <section className={`w-full hidden lg:inline-block bg-base-200 ${className ?? ""}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 md:py-12">
         <HeroTitle title={title} />
         <div className="mt-3 sm:mt-4">

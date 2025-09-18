@@ -6,7 +6,7 @@ import AuthNav from "./auth-nav";
 
 export default async function Header() {
   return (
-    <header className="w-full border-b border-neutral-200 bg-base-100">
+ <header className="sticky top-0 z-50 bg-base-100/95 backdrop-blur supports-[backdrop-filter]:bg-base-100/80 border-b border-neutral-200">
       <div className="mx-auto max-w-7xl h-16 px-3 sm:px-4 lg:px-6 flex items-center">
         <div className="flex-1">
           <Brand />
