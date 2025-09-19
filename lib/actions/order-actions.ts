@@ -1,6 +1,8 @@
 // src/lib/orders.ts
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export type ConfirmResult =
   | { ok: true; orderId: string; email?: string | null }
@@ -42,3 +44,5 @@ export async function confirmOrderFromStripeSession(sessionId: string): Promise<
   // NOTE: DO NOT clear cart here (not a Server Action).
   return { ok: true, orderId: order.id, email: chk.customer_details?.email as string | undefined };
 }
+
+
