@@ -1,45 +1,41 @@
-// src/components/order/ItemCardAdd.tsx
+// src/components/order/item-card.tsx  (new)
 
-import { addToCart } from "@/lib/actions/cart-actions";
+import ItemOptionsModal, { AddOnOpt, SizeOpt } from "./order-items-modal";
 
-export default function ItemCardAdd({
-  id,
-  name,
-  description,
-  priceCents,
-  slug, // for future "View" page
+export default function ItemCard({
+  id, slug, name, description, priceCents,
+  sizes, addons,
 }: {
   id: string;
+  slug: string;
   name: string;
   description: string;
   priceCents: number;
-  slug: string;
+  sizes: SizeOpt[];
+  addons?: AddOnOpt[];
 }) {
+  const modalId = `modal-${slug}`;
   return (
-    <article className="card bg-base-100 border border-neutral-200 rounded-xl">
-      <div className="card-body">
-        <h3 className="font-semibold">{name}</h3>
-        <p className="text-sm opacity-70 line-clamp-2">{description}</p>
-        <div className="flex items-center justify-between pt-3">
-          <span className="font-medium">${(priceCents / 100).toFixed(2)}</span>
-
-          {/* SSR form -> adds to cookie cart */}
-          <form action={addToCart} className="flex items-center gap-2">
-            <input type="hidden" name="menuItemId" value={id} />
-            <input
-              name="qty"
-              type="number"
-              min={1}
-              defaultValue={1}
-              className="input input-bordered input-xs w-14 text-center"
-              aria-label="Quantity"
-            />
-            <button className="btn btn-sm" type="submit">
-              Add
-            </button>
-          </form>
+    <>
+      {/* Card becomes the opener via <label htmlFor> (DaisyUI modal) */}
+      <label htmlFor={modalId} className="card bg-base-100 border border-neutral-200 rounded-2xl cursor-pointer hover:shadow-sm transition">
+        <div className="card-body">
+          <h3 className="font-semibold">{name}</h3>
+          <p className="text-sm opacity-70 line-clamp-2">{description}</p>
+          <div className="pt-2 font-medium">${(priceCents / 100).toFixed(2)}</div>
         </div>
-      </div>
-    </article>
+      </label>
+
+      {/* The modal itself */}
+      <ItemOptionsModal
+        modalId={modalId}
+        itemId={id}
+        itemName={name}
+        itemDescription={description}
+        basePriceCents={priceCents}
+        sizes={sizes}
+        addons={addons}
+      />
+    </>
   );
 }

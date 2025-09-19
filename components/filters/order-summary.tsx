@@ -1,10 +1,15 @@
 // src/components/filters/order-summary.tsx
 import { readCart, totals } from "@/lib/cart";
-import SeaNotice from "@/components/ui/sea-notice"; // <-- add this import
-import { clearCartAction, removeLine, setQty } from "@/lib/actions/cart-actions";
+import SeaNotice from "@/components/ui/sea-notice";
+import {
+  clearCartAction,
+  removeLine,
+  setQty,
+  removeAddonFromLine,
+} from "@/lib/actions/cart-actions";
 
 export default async function OrderSummaryCard() {
-  const cart = await readCart();              // ⬅️ await now
+  const cart = await readCart();
   const { subtotalCents } = totals(cart);
 
   return (
@@ -19,22 +24,56 @@ export default async function OrderSummaryCard() {
 
         <div className="space-y-4 py-4">
           {cart.lines.length === 0 ? (
-            // ⬇️ replace your previous empty state with this
             <SeaNotice
               message="Your net is empty — add something tasty to your order."
               icon="fish"
               tone="neutral"
             />
           ) : (
-            cart.lines.map((l) => (
+            cart.lines.map((l: any) => (
               <div key={l.id} className="grid grid-cols-[1fr,auto] gap-2">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{l.name}</span>
                   </div>
-                  <div className="text-xs opacity-70">Medium</div>
 
-                  <div className="flex items-center gap-3 text-xs mt-1">
+                  {/* Selected add-ons (each removable) */}
+                  {Array.isArray(l.meta?.addonIds) && l.meta.addonIds.length > 0 && (
+                    <ul className="mt-1 space-y-1">
+                      {l.meta.addonIds.map((aid: string) => {
+                        const label = l.meta?.addonLabels?.[aid] ?? "Add-on";
+                        const priceCents = l.meta?.addonPrices?.[aid] ?? 0;
+                        return (
+                          <li key={aid} className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-2 opacity-80">
+                              <span>{label}</span>
+                              <span className="opacity-60">
+                                +${(priceCents / 100).toFixed(2)}
+                              </span>
+                            </div>
+                            <form action={removeAddonFromLine}>
+                              <input type="hidden" name="lineId" value={l.id} />
+                              <input type="hidden" name="addonId" value={aid} />
+                              <button className="link link-hover" type="submit">
+                                Remove
+                              </button>
+                            </form>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+
+                  {/* Special instructions (only if non-empty) */}
+                  {typeof l.meta?.notes === "string" &&
+                    l.meta.notes.trim().length > 0 && (
+                      <div className="text-xs opacity-60 mt-1">
+                        “{l.meta.notes}”
+                      </div>
+                    )}
+
+                  {/* Qty + remove line */}
+                  <div className="flex items-center gap-3 text-xs mt-2">
                     <form action={setQty} className="inline-flex gap-1 items-center">
                       <input type="hidden" name="lineId" value={l.id} />
                       <span className="opacity-60">Qty</span>
@@ -53,7 +92,7 @@ export default async function OrderSummaryCard() {
                     <form action={removeLine}>
                       <input type="hidden" name="lineId" value={l.id} />
                       <button type="submit" className="link link-hover text-xs">
-                        Remove
+                        Remove item
                       </button>
                     </form>
                   </div>
@@ -71,17 +110,26 @@ export default async function OrderSummaryCard() {
 
         <div className="flex items-center justify-between py-2">
           <span className="font-semibold">Subtotal</span>
-          <span className="font-semibold">${(subtotalCents / 100).toFixed(2)}</span>
+          <span className="font-semibold">
+            ${(subtotalCents / 100).toFixed(2)}
+          </span>
         </div>
 
         <div className="mt-3 space-y-2">
-          <button className="btn btn-block rounded-2xl btn-neutral" type="button" disabled={cart.lines.length === 0}>
+          <button
+            className="btn btn-block rounded-2xl btn-neutral"
+            type="button"
+            disabled={cart.lines.length === 0}
+          >
             Checkout
           </button>
 
           {cart.lines.length > 0 && (
             <form action={clearCartAction}>
-              <button type="submit" className="btn btn-ghost rounded-2xl btn-block border border-neutral-200">
+              <button
+                type="submit"
+                className="btn btn-ghost rounded-2xl btn-block border border-neutral-200"
+              >
                 Clear
               </button>
             </form>
