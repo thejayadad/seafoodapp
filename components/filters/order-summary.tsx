@@ -7,6 +7,7 @@ import {
   setQty,
   removeAddonFromLine,
 } from "@/lib/actions/cart-actions";
+import Link from "next/link";
 
 export default async function OrderSummaryCard() {
   const cart = await readCart();
@@ -116,13 +117,17 @@ export default async function OrderSummaryCard() {
         </div>
 
         <div className="mt-3 space-y-2">
-          <button
-            className="btn btn-block rounded-2xl btn-neutral"
-            type="button"
-            disabled={cart.lines.length === 0}
-          >
-            Checkout
-          </button>
+
+{cart.lines.length === 0 ? (
+  <button className="btn btn-neutral btn-block rounded-2xl" disabled>
+    Checkout
+  </button>
+) : (
+  <Link href="/cart" className="btn btn-neutral btn-block rounded-2xl">
+    Checkout
+  </Link>
+)}
+
 
           {cart.lines.length > 0 && (
             <form action={clearCartAction}>

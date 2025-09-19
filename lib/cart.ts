@@ -10,19 +10,15 @@ export type CartLine = {
   unitPriceCents: number;
   qty: number;
 };
+
 export type Cart = { lines: CartLine[] };
 
 const COOKIE_KEY = "cart_v1";
 
-// Normalize cookies() for both Server Components (sync) and Actions (async)
-async function getCookieStore() {
-  const c = cookies() as any;
-  return typeof c.then === "function" ? await c : c;
-}
-
+// Reading is allowed in RSC & Server Actions
 export async function readCart(): Promise<Cart> {
-  const store = await getCookieStore();
-  const raw = store.get(COOKIE_KEY)?.value;
+  const store = cookies();
+  const raw = (await store).get(COOKIE_KEY)?.value;
   if (!raw) return { lines: [] };
   try {
     const parsed = JSON.parse(raw) as Cart;
@@ -33,19 +29,20 @@ export async function readCart(): Promise<Cart> {
   }
 }
 
+/** WRITE: MUST be invoked from a Server Action or Route Handler */
 export async function writeCart(cart: Cart) {
-  const store = await getCookieStore();
-  store.set(COOKIE_KEY, JSON.stringify(cart), {
+  "use server";
+  (await cookies()).set(COOKIE_KEY, JSON.stringify(cart), {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
-    // maxAge: 60 * 60 * 24,
   });
 }
 
+/** CLEAR: MUST be invoked from a Server Action or Route Handler */
 export async function clearCart() {
-  const store = await getCookieStore();
-  store.set(COOKIE_KEY, JSON.stringify({ lines: [] }), {
+  "use server";
+  (await cookies()).set(COOKIE_KEY, JSON.stringify({ lines: [] }), {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
