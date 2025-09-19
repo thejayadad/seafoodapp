@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 export type CartLine = {
+  meta: {};
   id: string;
   menuItemId: string;
   name: string;

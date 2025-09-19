@@ -69,6 +69,8 @@ export async function createCheckoutSession() {
           menuItemId: l.menuItemId,
           qty: l.qty,
           unitPriceCents: l.unitPriceCents,
+          meta: l.meta ?? {},            // <-- persist size/add-ons/notes
+
         })),
       },
     },
