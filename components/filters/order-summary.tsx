@@ -1,6 +1,7 @@
 // src/components/filters/order-summary.tsx
 import { readCart, totals } from "@/lib/cart";
 import SeaNotice from "@/components/ui/sea-notice";
+import RemoveButton from "../order/remove-button";
 import {
   clearCartAction,
   removeLine,
@@ -52,13 +53,18 @@ export default async function OrderSummaryCard() {
                                 +${(priceCents / 100).toFixed(2)}
                               </span>
                             </div>
-                            <form action={removeAddonFromLine}>
+                            {/* <form action={removeAddonFromLine}>
                               <input type="hidden" name="lineId" value={l.id} />
                               <input type="hidden" name="addonId" value={aid} />
                               <button className="link link-hover" type="submit">
                                 Remove
                               </button>
-                            </form>
+                            </form> */}
+                            <RemoveButton
+                            hiddenFields={{lineId: l.id, addonId: aid}}
+                            action={removeAddonFromLine}
+                            label="Remove"
+                            />
                           </li>
                         );
                       })}
@@ -90,12 +96,17 @@ export default async function OrderSummaryCard() {
                       </button>
                     </form>
 
-                    <form action={removeLine}>
+                    {/* <form action={removeLine}>
                       <input type="hidden" name="lineId" value={l.id} />
                       <button type="submit" className="link link-hover text-xs">
                         Remove item
                       </button>
-                    </form>
+                    </form> */}
+                    <RemoveButton
+                      label="Remove Item"
+                      hiddenFields={{lineId: l.id}}
+                      action={removeLine}
+                    />
                   </div>
                 </div>
 

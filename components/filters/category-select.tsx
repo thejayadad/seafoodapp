@@ -1,4 +1,3 @@
-// src/components/filters/category-select.tsx
 import { homeHref } from "@/lib/url";
 import Link from "next/link";
 import { getCategoriesBare } from "./data-fetchers";

@@ -1,4 +1,3 @@
-// src/app/order/_data/fetchers.ts
 import { prisma } from "@/lib/prisma";
 
 export async function getCategoriesBare() {

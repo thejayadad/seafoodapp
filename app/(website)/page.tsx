@@ -1,4 +1,3 @@
-// src/app/page.tsx
 export const dynamic = "force-dynamic";
 
 import Hero from "@/components/hero/hero";
@@ -43,20 +42,19 @@ export default async function HomePage({ searchParams }: PageProps) {
       />
 
       {/* STICKY FILTERS */}
-      <div className="max-w-7xl mx-auto sm:px-2 py-6 sticky top-14 bg-base-100 z-50">
-        <div className="flex items-center gap-4 border-b border-neutral-200 pb-3">
+      <div className="max-w-7xl mx-auto sm:px-2 py-6 sticky top-14 bg-base-100 z-5">
+        <div className="flex items-center gap-4 border-b border-neutral-200 pb-3 px-4">
           <CategorySelect active={cat} q={q} />
           <div className="flex-1">
             <SearchForm q={q} cat={cat} />
           </div>
-          <div className="hidden md:flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <SegmentedFulfillment mode={mode} q={q} cat={cat} />
             <TimePill />
           </div>
         </div>
       </div>
 
-      {/* MAIN GRID */}
       <div className="flex flex-row-reverse max-w-7xl mx-auto gap-[48px] px-4">
         <StickyWrapper>
           <OrderSummaryCard />

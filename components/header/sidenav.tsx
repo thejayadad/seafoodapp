@@ -28,7 +28,7 @@ export default function Sidenav() {
         <label htmlFor="nav-drawer" className="drawer-overlay" aria-label="Close menu" />
         <aside className="w-80 bg-base-100 min-h-full">
           {/* header row inside the drawer */}
-          <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center justify-between p-4 border-b border-neutral-200">
             <div className="text-base font-medium">Good afternoon</div>
             <label
               htmlFor="nav-drawer"

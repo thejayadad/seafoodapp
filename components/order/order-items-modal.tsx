@@ -1,5 +1,6 @@
 import { addConfiguredToCart } from "@/lib/actions/configured-actions";
 import ModalSubmit from "./modal-submit";
+import AddToOrderButton from "./add-to-order-btn";
 
 export type SizeOpt = { id: string; label: string; deltaCents?: number; required?: true };
 export type AddOnOpt = { id: string; label: string; deltaCents?: number };
@@ -151,12 +152,25 @@ export default function ItemOptionsModal({
                 <input type="hidden" name="sizeDeltaCents" value={0} />
 
                 {/* Submit that also closes the modal immediately */}
+
+                {/* dynamic Total | base price + add ons */}
+
+               
+
+
+
+
                 <ModalSubmit
                   modalId={modalId}
                   className="btn btn-neutral h-11 min-h-0 rounded-full px-6 min-w-[12rem] justify-between"
                 >
                   <span>Add to Order</span>
                   <span className="opacity-90">{`$${(basePriceCents / 100).toFixed(2)}`}</span>
+                  {/* <AddToOrderButton
+                  basePriceCents={a.unitPriceCents}
+                  addonIds={a.metadata}
+                  /> */}
+                  
                 </ModalSubmit>
               </div>
             </div>
